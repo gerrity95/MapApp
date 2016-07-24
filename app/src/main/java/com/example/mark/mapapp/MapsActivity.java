@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -31,6 +32,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
 
         GoogleApiClient.ConnectionCallbacks,
@@ -39,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private GoogleMap mMap;
+    ArrayList<LatLng> MarkerPoints;
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
@@ -67,7 +81,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * we just add a marker near Dublin, Ireland
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -75,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         //Initialise Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -96,6 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(Dublin).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(Dublin));
     }
+
 
 
     protected synchronized void buildGoogleApiClient() {
@@ -138,12 +153,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //PLace current location marker
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+/*
+        The below code adds a marker at the current location alongside the small blue circle (not needed)
+
         MarkerOptions markerOptions = new MarkerOptions();
+
         markerOptions.position(latlng);
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
 
+
+        mCurrLocationMarker = mMap.addMarker(markerOptions);
+*/
         //Move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
@@ -216,6 +237,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -254,6 +276,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    private class FetchUrl {
     }
 }
 
