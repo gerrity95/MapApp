@@ -41,6 +41,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,12 +52,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LocationListener {
 
 
-    private GoogleMap mMap;
-    ArrayList<LatLng> MarkerPoints;
+
+
+    public GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -122,6 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mGoogleApiClient.connect();
     }
 
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
@@ -137,6 +141,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -278,7 +283,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         client.disconnect();
     }
 
-    private class FetchUrl {
-    }
 }
 
