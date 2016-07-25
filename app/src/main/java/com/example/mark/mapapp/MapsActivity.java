@@ -61,6 +61,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Marker mCurrLocationMarker;
     downloadUrl newDL = new downloadUrl();
 
+    LatLng latlng = new LatLng(0,0);
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -118,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onMapClick(LatLng point) {
 
                 // Already two locations
-                if (MarkerPoints.size() > 1) {
+                if (MarkerPoints.size() >= 1) {
                     MarkerPoints.clear();
                     mMap.clear();
                 }
@@ -147,9 +149,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                mMap.addMarker(options);
 
                 // Checks, whether start and end locations are captured
-                if (MarkerPoints.size() >= 2) {
-                    LatLng origin = MarkerPoints.get(0);
-                    LatLng dest = MarkerPoints.get(1);
+                if (MarkerPoints.size() >= 1) {
+                    LatLng origin = latlng;
+                    LatLng dest = MarkerPoints.get(0);
 
                     // Getting URL to the Google Directions API
                     MappingPoints myurl = new MappingPoints();
@@ -317,7 +319,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //PLace current location marker
-        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+        latlng = new LatLng(location.getLatitude(), location.getLongitude());
 
         //Move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
