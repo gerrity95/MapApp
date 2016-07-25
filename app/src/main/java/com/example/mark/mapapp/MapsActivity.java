@@ -1,18 +1,19 @@
 package com.example.mark.mapapp;
 
-import android.*;
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -41,11 +41,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,16 +53,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
-
-
-
     public GoogleMap mMap;
     ArrayList<LatLng> MarkerPoints;
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-    public Location location;
+    downloadUrl newDL = new downloadUrl();
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -91,15 +87,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Dublin, Ireland
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -140,24 +127,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MarkerPoints.add(point);
 
                 // Creating MarkerOptions
-                MarkerOptions options = new MarkerOptions();
+              MarkerOptions options = new MarkerOptions();
 
                 // Setting the position of the marker
-                options.position(point);
+             options.position(point);
 
                 /**
                  * For the start location, the color of marker is GREEN and
                  * for the end location, the color of marker is RED.
                  */
-                if (MarkerPoints.size() == 1) {
+
+                if(MarkerPoints.size()==1){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                } else if (MarkerPoints.size() == 2) {
+                }else if(MarkerPoints.size()==2){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 }
 
-
                 // Add new marker to the Google Map Android API V2
-                mMap.addMarker(options);
+               mMap.addMarker(options);
 
                 // Checks, whether start and end locations are captured
                 if (MarkerPoints.size() >= 2) {
@@ -182,49 +169,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    /**
-     * A method to download json data from url
-     */
-    private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
-        InputStream iStream = null;
-        HttpURLConnection urlConnection = null;
-        try {
-            URL url = new URL(strUrl);
-
-            // Creating an http connection to communicate with url
-            urlConnection = (HttpURLConnection) url.openConnection();
-
-            // Connecting to url
-            urlConnection.connect();
-
-            // Reading data from url
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-            StringBuffer sb = new StringBuffer();
-
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-            data = sb.toString();
-            Log.d("downloadUrl", data.toString());
-            br.close();
-
-        } catch (Exception e) {
-            Log.d("Exception", e.toString());
-        } finally {
-            iStream.close();
-            urlConnection.disconnect();
-        }
-        return data;
-    }
 
     // Fetches data from url passed
-    private class FetchUrl extends AsyncTask<String, Void, String> {
+    public class FetchUrl extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... url) {
@@ -234,7 +181,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             try {
                 // Fetching the data from web service
-                data = downloadUrl(url[0]);
+                switch (data = newDL.downloadUrl(url[0])) {
+                }
                 Log.d("Background Task data", data.toString());
             } catch (Exception e) {
                 Log.d("Background Task", e.toString());
@@ -253,8 +201,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
-
-
 
     /**
      * A class to parse the Google Places in JSON format
@@ -313,7 +259,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(10);
+                lineOptions.width(5);
                 lineOptions.color(Color.RED);
 
                 Log.d("onPostExecute","onPostExecute lineoptions decoded");
@@ -356,7 +302,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
     @Override
     public void onConnectionSuspended(int i) {
 
@@ -373,18 +318,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //PLace current location marker
         LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-/*
-        The below code adds a marker at the current location alongside the small blue circle (not needed)
 
-        MarkerOptions markerOptions = new MarkerOptions();
-
-        markerOptions.position(latlng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-
-
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
-*/
         //Move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
@@ -501,4 +435,3 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 }
-
