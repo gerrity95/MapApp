@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -41,6 +42,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,6 +64,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     downloadUrl newDL = new downloadUrl();
 
     LatLng latlng = new LatLng(0,0);
+    Polyline polyline;
+    LatLng test = new LatLng(0,0);
+
+
+    ArrayList<Marker> Markers;
 
 
     /**
@@ -73,6 +80,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public MapsActivity() {
 
         MarkerPoints = new ArrayList<LatLng>();
+        Markers = new ArrayList<>();
+
     }
 
     @Override
@@ -107,12 +116,70 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
         }
 
-/*
+
         // Add a marker in Sydney and move the camera
-        LatLng Dublin = new LatLng(53.348798, -6.259749);
-        mMap.addMarker(new MarkerOptions().position(Dublin).title("Marker in Dublin"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(Dublin));
-*/
+        LatLng FBD = new LatLng(53.327019, -6.344941);
+        mMap.addMarker(new MarkerOptions().position(FBD).title("Marker in FBD"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(FBD));
+
+
+
+        // Add a marker in Sydney and move the camera
+        LatLng DCU = new LatLng(53.385389, -6.257290);
+        mMap.addMarker(new MarkerOptions().position(DCU).title("Marker in DCU"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(DCU));
+
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                    if (polyline != null) { //this if statement is entered but polyline.remove doesn't work
+                        //polyline.remove();
+                        polyline.setVisible(false);
+
+                    }
+
+
+                // Checks, whether start and end locations are captured
+                    LatLng origin = latlng;
+                    LatLng dest = marker.getPosition();
+
+                //if (test != dest) {
+
+                    // Getting URL to the Google Directions API
+                    MappingPoints myurl = new MappingPoints();
+                    String url = myurl.getUrl(origin, dest);
+                    Log.d("onMapClick", url.toString());
+                    FetchUrl FetchUrl = new FetchUrl();
+
+                    // Start downloading json data from Google Directions API
+                    FetchUrl.execute(url);
+                    //move map camera
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+                    //test.equals(dest);
+                    test = marker.getPosition();
+
+                //}
+               // else
+              //  {
+                    //polyline.remove();
+              //      mMap.clear();
+               // }
+
+                return false;
+            }
+
+
+        });
+
+
+/*
+
         // Setting onclick event listener for the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -137,7 +204,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 /**
                  * For the start location, the color of marker is GREEN and
                  * for the end location, the color of marker is RED.
-                 */
+
 
                 if(MarkerPoints.size()==1){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
@@ -168,12 +235,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
+*/
     }
 
-
     // Fetches data from url passed
-    public class FetchUrl extends AsyncTask<String, Void, String> {
+    class FetchUrl extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... url) {
@@ -207,7 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * A class to parse the Google Places in JSON format
      */
-    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+    class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         // Parsing the data in non-ui thread
         @Override
@@ -259,10 +325,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     points.add(position);
                 }
 
+
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(5);
                 lineOptions.color(Color.RED);
+
+                polyline = mMap.addPolyline(lineOptions);
 
                 Log.d("onPostExecute","onPostExecute lineoptions decoded");
 

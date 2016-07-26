@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONObject;
@@ -72,6 +73,8 @@ public class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<Str
             lineOptions.addAll(points);
             lineOptions.width(10);
             lineOptions.color(Color.RED);
+
+            Polyline polyline = mMap.addPolyline(lineOptions);
 
             Log.d("onPostExecute","onPostExecute lineoptions decoded");
 
