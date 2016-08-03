@@ -16,6 +16,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -48,6 +50,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
 
@@ -66,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LatLng latlng = new LatLng(0,0);
     Polyline polyline;
     LatLng test = new LatLng(0,0);
+
 
 
     ArrayList<Marker> Markers;
@@ -117,6 +121,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
+        if (mMap != null) {
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    View v = getLayoutInflater().inflate(R.layout.info_windows, null);
+                    TextView tvLocality = (TextView) v.findViewById(R.id.tv_locality);
+                    TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+                    TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+                    TextView tvSnippet = (TextView) v.findViewById(R.id.tv_snippet);
+
+
+                    LatLng ll = marker.getPosition();
+
+                    tvLocality.setText(marker.getTitle());
+                    tvLat.setText("Latitude: " + ll.latitude);
+                    tvLng.setText("Longitude: " + ll.longitude);
+                    tvSnippet.setText(marker.getSnippet());
+
+
+                    return v;
+                }
+            });
+        }
+
         // Add a marker in Sydney and move the camera
         LatLng FBD = new LatLng(53.327019, -6.344941);
         mMap.addMarker(new MarkerOptions().position(FBD).title("Marker in FBD"));
@@ -138,7 +171,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     if (polyline != null) { //this if statement is entered but polyline.remove doesn't work
                         //polyline.remove();
-                        polyline.setVisible(false);
+                        //polyline.equals(false);
 
                     }
 
@@ -164,12 +197,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //test.equals(dest);
                     test = marker.getPosition();
 
-                //}
-               // else
-              //  {
-                    //polyline.remove();
-              //      mMap.clear();
-               // }
 
                 return false;
             }
@@ -331,7 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lineOptions.width(5);
                 lineOptions.color(Color.RED);
 
-                polyline = mMap.addPolyline(lineOptions);
+                mMap.addPolyline(lineOptions);
 
                 Log.d("onPostExecute","onPostExecute lineoptions decoded");
 
