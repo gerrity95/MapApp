@@ -205,64 +205,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-/*
-
-        // Setting onclick event listener for the map
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng point) {
-
-                // Already two locations
-                if (MarkerPoints.size() >= 1) {
-                    MarkerPoints.clear();
-                    mMap.clear();
-                }
-
-                // Adding new item to the ArrayList
-                MarkerPoints.add(point);
-
-                // Creating MarkerOptions
-              MarkerOptions options = new MarkerOptions();
-
-                // Setting the position of the marker
-             options.position(point);
-
-                /**
-                 * For the start location, the color of marker is GREEN and
-                 * for the end location, the color of marker is RED.
-
-
-                if(MarkerPoints.size()==1){
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                }else if(MarkerPoints.size()==2){
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
-
-                // Add new marker to the Google Map Android API V2
-               mMap.addMarker(options);
-
-                // Checks, whether start and end locations are captured
-                if (MarkerPoints.size() >= 1) {
-                    LatLng origin = latlng;
-                    LatLng dest = MarkerPoints.get(0);
-
-                    // Getting URL to the Google Directions API
-                    MappingPoints myurl = new MappingPoints();
-                    String url = myurl.getUrl(origin, dest);
-                    Log.d("onMapClick", url.toString());
-                    FetchUrl FetchUrl = new FetchUrl();
-
-                    // Start downloading json data from Google Directions API
-                    FetchUrl.execute(url);
-                    //move map camera
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-                }
-
-            }
-        });
-*/
     }
 
     // Fetches data from url passed

@@ -37,6 +37,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final Button toMap =(Button)findViewById(R.id.secondButton);
+        toMap.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent act3 = new Intent(view.getContext(),MapsActivity.class);
+                startActivity(act3);
+
+            }
+        });
+
 
     }
 

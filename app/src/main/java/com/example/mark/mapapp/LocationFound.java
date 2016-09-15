@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -30,9 +32,24 @@ public class LocationFound extends MainActivity {
         ActionBar actionBar = getActionBar();
 
 
-        // Enabling Up / Back navigation
-       // actionBar.setDisplayHomeAsUpEnabled(true);
+        Button submitButton = (Button) findViewById(R.id.ButtonFindFood);
+        submitButton.setOnClickListener( new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                //Add click functions here
+            }
+        });
+
+        final EditText restaurantName = (EditText) findViewById(R.id.restaurantName);
+        String chosenRestaurant = restaurantName.getText().toString();
+
+        final Spinner foodTypeSpinner = (Spinner) findViewById(R.id.SpinnerFoodType);
+        String chosenFoodtype = foodTypeSpinner.getSelectedItem().toString();
+
+        final Spinner locationSpinner = (Spinner) findViewById(R.id.SpinnerLocation);
+        String chosenLocation = locationSpinner.getSelectedItem().toString();
 
 
     }
@@ -43,24 +60,4 @@ public class LocationFound extends MainActivity {
     }
 
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    */
-
-    /*
-    public boolean onOptionsItemSelected(int featureId, MenuItem item) {
-        int itemId = item.getItemId();
-        if(itemId == android.R.id.home){
-            finish();
-        }
-        return true;
-    }
-*/
 }

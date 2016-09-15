@@ -21,4 +21,13 @@
         android:layout_marginTop="90dp"
         android:text="Switch to Activity 2" />
 
+    <Button
+        android:id="@+id/secondButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:text="Switch to Map" />
+
 </LinearLayout>

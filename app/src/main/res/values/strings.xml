@@ -13,4 +13,26 @@
     <string name="activity_new_message">New Activity</string>
     <string name="button_send">Send</string>
     <string name="search_hint">Search Hint</string>
+
+    <!-- Below are the strings for the spinners - these will be replaced when populated by the DB info -->
+
+
+    <!-- Food Types -->
+    <string name="foodtype">Food Type</string>
+    <string name="foodtype1">Indian</string>
+    <string name="foodtype2">Italian</string>
+    <string name="foodtype3">Bar/Pub</string>
+    <string name="foodtype4">International</string>
+
+    <!-- Locations -->
+
+    <string name="location">Locations</string>
+    <string name="location1">Drumcondra</string>
+    <string name="location2">Ballymun</string>
+    <string name="location3">Ballyfermot</string>
+    <string name="location4">Rathmines</string>
+    <string name="restaurantName">Restaurant Name</string>
+    <string name="SubmitFoodButton">Submit</string>
+
+
 </resources>
