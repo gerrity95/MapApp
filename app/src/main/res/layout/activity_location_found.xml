@@ -35,7 +35,7 @@
         android:id="@+id/SpinnerFoodType"
         android:layout_height="wrap_content"
         android:prompt="@string/foodtype"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:entries="@array/foodtypeList"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
