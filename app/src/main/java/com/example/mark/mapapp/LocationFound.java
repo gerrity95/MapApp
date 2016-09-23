@@ -31,6 +31,18 @@ public class LocationFound extends MainActivity {
         // get action bar
         ActionBar actionBar = getActionBar();
 
+        final Button restaurantList =(Button)findViewById(R.id.ButtonFindFood);
+        assert restaurantList != null;
+        restaurantList.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent act2 = new Intent(view.getContext(),RestaurantList.class);
+                startActivity(act2);
+
+            }
+        });
+
 
         Button submitButton = (Button) findViewById(R.id.ButtonFindFood);
         submitButton.setOnClickListener( new View.OnClickListener() {
